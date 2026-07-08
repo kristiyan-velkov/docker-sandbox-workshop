@@ -1,0 +1,3 @@
+Hello from demo-app!
+
+This is a simple demo folder for the Docker Sandbox Workshop.
