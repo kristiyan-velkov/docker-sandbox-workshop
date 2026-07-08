@@ -1,0 +1,38 @@
+---
+description: Claude Code workflow inside workshop-app and sbx sandboxes
+alwaysApply: true
+---
+
+# Claude Code — workshop-app
+
+## Entry
+
+Read `CLAUDE.md` and `AGENTS.md` in this folder.
+
+## sbx sandbox
+
+```bash
+sbx secret set -g anthropic          # host keychain — never in repo
+sbx run claude workshop-app/ --name feature/<name>
+# Or clone mode for isolated Git work:
+sbx run --clone claude workshop-app/ --name feature/<name>
+```
+
+Credentials stay on host (proxy-managed inside VM). Use `--clone` for isolated Git work.
+
+## Code standards
+
+- Server Components by default; `"use client"` only for forms/interactivity
+- `"use server"` files: **async functions only** — types in separate `*.types.ts`
+- Validate all `FormData` in Server Actions with Zod
+- Workshop strings → `src/lib/workshop-data.ts`
+
+## Do not
+
+- Paste API keys, Supabase service role, or `.env.local` into commits
+- Add dependencies without strong reason
+- Break Apple theme tokens in `globals.css`
+
+## Ship check
+
+`npm run build && npm run lint` from `workshop-app/`

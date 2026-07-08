@@ -1,0 +1,16 @@
+---
+description: Apple-inspired design tokens and UI patterns
+globs: src/**/*.{tsx,css}
+alwaysApply: false
+---
+
+# Apple design system
+
+- Semantic colors and radii live in `src/app/globals.css` (`--background`, `--foreground`, `--muted`, etc.).
+- Prefer existing `src/components/ui/*` (Button, Card, Badge) over one-off styled divs.
+- Typography: clear hierarchy — hero titles large and tight; body text muted where secondary.
+- Spacing: generous section padding; use `PageShell` max-width and vertical rhythm.
+- Motion: subtle transitions only; respect `prefers-reduced-motion`.
+- Dark mode: use CSS variables — do not hardcode `#fff` / `#000` in components.
+
+When adding components, match existing shadcn + Tailwind patterns in the repo.
