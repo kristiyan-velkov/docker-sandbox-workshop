@@ -1,3 +1,4 @@
+// Edited in clone mode (lab 4 test).
 import { WORKSHOP_LAB_IDS } from "@/lib/labs";
 
 export const workshop = {
