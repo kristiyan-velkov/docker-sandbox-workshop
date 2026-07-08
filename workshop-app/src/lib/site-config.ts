@@ -1,6 +1,5 @@
 export const site = {
   title: "Docker Sandbox Workshop",
-  event: "WeAreDevelopers World Congress · Berlin",
   githubRepoUrl: "https://github.com/kristiyan-velkov/docker-sandbox-workshop",
   dockerUrl: "https://www.docker.com/",
   dockerSandboxesUrl: "https://docs.docker.com/ai/sandboxes/",

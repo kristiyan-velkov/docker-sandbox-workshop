@@ -1,0 +1,26 @@
+# Lab 6 kit template — fill in each field, then sbx kit validate
+# Spec: https://docs.docker.com/ai/sandboxes/customize/kit-reference/
+
+schemaVersion: "1"
+kind: mixin
+name: my-workshop-kit
+displayName: My workshop kit
+description: >-
+  Custom kit template for Lab 6 — edit name, network, env, and startup description.
+
+network:
+  allowedDomains:
+    - registry.npmjs.org
+  deniedDomains:
+    - google.com
+
+environment:
+  variables:
+    NEXT_TELEMETRY_DISABLED: "1"
+
+commands:
+  startup:
+    - command: [sh, /home/agent/.local/bin/workshop-bootstrap.sh]
+      user: "1000"
+      background: true
+      description: npm ci (if needed) and Next.js dev server on :3000

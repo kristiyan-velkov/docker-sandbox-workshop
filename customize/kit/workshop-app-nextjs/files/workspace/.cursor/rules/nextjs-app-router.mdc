@@ -1,16 +1,20 @@
 ---
 description: Next.js App Router conventions for workshop-app
-globs: src/**/*
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Next.js App Router
 
-- Routes under `src/app/` — use Server Components by default; `"use client"` only when needed.
-- Shared layout: `src/app/layout.tsx`, metadata in page files or `layout.tsx`.
-- Workshop content from `src/lib/workshop-data.ts` — avoid hardcoding lab lists in pages.
-- External platform links: `platformUrl("/login")` from `src/lib/site-config.ts`.
-- UI: shadcn in `src/components/ui/`; page chrome via `PageShell`, `PageHero`, `SectionTitle`.
-- Styling: Tailwind + CSS variables in `src/app/globals.css` (Apple design tokens).
+This project uses **Next.js 16** App Router — APIs may differ from older Next.js versions. Read `node_modules/next/dist/docs/` when unsure.
 
-Before using newer Next APIs, check `node_modules/next/dist/docs/` — this project may use conventions that differ from older Next versions.
+## Conventions
+
+1. **Default to Server Components** — add `"use client"` only for hooks and events
+2. **Workshop copy** lives in `src/lib/workshop-data.ts`, not hardcoded in pages
+3. **Styling** — Tailwind v4 + Apple tokens in `globals.css`; reuse `src/components/ui/`
+4. **No new UI libraries** (MUI, Chakra, etc.)
+5. **No Supabase in this repo** — platform handles data; workshop-app is static demo content
+
+## Layout primitives
+
+Use `PageShell`, `PageHero`, `SectionTitle`, `AgendaList` for new pages — match existing Apple-styled patterns.

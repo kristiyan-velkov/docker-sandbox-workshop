@@ -4,7 +4,7 @@ import { LinkButton } from "@/components/link-button";
 import { platformUrl } from "@/lib/site-config";
 
 const HERO_STATS = [
-  { value: "10", label: "Hands-on labs" },
+  { value: "6", label: "Hands-on labs" },
   { value: "sbx", label: "CLI workflow" },
   { value: "microVM", label: "Isolation" },
 ] as const;

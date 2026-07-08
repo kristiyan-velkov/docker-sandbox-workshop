@@ -73,7 +73,7 @@ You will pipe your GitHub CLI token to `sbx secret set -g github`, echo `$GH_TOK
 |----------|---------|
 | [Lab 1](../lab-01-first-sandbox/) | Cursor API key for `sbx run cursor` |
 | [Lab 2](../lab-02-network-policy/) | Network policy blocks exfiltration attempts |
-| [Lab 10](../lab-10-capstone/) | Same GitHub token pattern in a PR workflow |
+| [Lab 4](../lab-04-clone-workflow/) | Clone mode workflow |
 
 ## Takeaway
 

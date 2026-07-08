@@ -4,7 +4,7 @@ YAML [kit mixins](https://docs.docker.com/ai/sandboxes/customize/kits/) applied 
 
 | Kit | Purpose |
 |-----|---------|
-| [workshop-app-nextjs](./workshop-app-nextjs/) | `npm ci`, Next.js dev server, network allow-list, Claude skill, Cursor rules |
+| [workshop-app-nextjs](./workshop-app-nextjs/) | `npm ci`, Next.js dev server, network allow-list, Cursor skill |
 
 ## Validate
 

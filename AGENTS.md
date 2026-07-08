@@ -1,10 +1,10 @@
 # Docker Sandbox Workshop — Agent Rules
 
-WeAreDevelopers World Congress · Berlin · 2-hour hands-on workshop.
+2-hour hands-on workshop on [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/).
 
 ## Mission
 
-Help attendees run AI coding agents (Claude Code, Cursor) safely inside [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) using the `sbx` CLI — YOLO mode without host risk.
+Help attendees run Cursor agents safely inside [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/) using the `sbx` CLI — YOLO mode without host risk.
 
 ## Repository layout
 
@@ -14,49 +14,46 @@ Help attendees run AI coding agents (Claude Code, Cursor) safely inside [Docker 
 | `lab-02-network-policy/` | Network deny rules, custom template, clone workflow |
 | `lab-03-secrets/` | `sbx secret set`, sentinel values, live API proxy check |
 | `lab-04-clone-workflow/` | `--clone`, test branch, fetch on host |
-| `lab-05-workshop-app/` | Template + kit for `workshop-app/` |
-| `lab-06-customize-stack/` | Stack `customize/` templates, kits, skills |
-| `lab-07-build-component/` | Agent builds UI in clone mode |
-| `lab-08-create-kit/` | Create & validate `./my-workshop-kit` |
-| `lab-09-use-custom-kit/` | Run with custom kit |
-| `lab-10-capstone/` | GitHub secret + PR workflow |
-| `workshop-app/` | Next.js demo — **sbx workspace** for labs 4–10 |
-| `docker-sandbox-platform/` | Deployed register / login / progress — https://nextjs-26f1-3000.prg1.zerops.app |
+| `lab-05-workshop-app/` | Run workshop-app with pre-built kit |
+| `lab-06-customize-stack/` | Create your custom kit — final lab |
+| `workshop-app/` | Next.js **playground** — sbx workspace for labs 4–6 |
+| `docker-sandbox-platform/` | Hosted register, login, lab progress, Q&A — https://nextjs-26f1-3000.prg1.zerops.app |
 | `workshop-landing/` | Conference landing on Zerops — `/login` & `/register` redirect to platform |
 | `customize/` | Sandbox templates & kit for `workshop-app/` |
 | `.cursor/mcp.json` | Chrome DevTools + Supabase MCP servers |
 
 ## Supabase + Server Actions
 
-Hosted on **docker-sandbox-platform** at https://nextjs-26f1-3000.prg1.zerops.app/ (or override via `workshop-app/.env.local`):
+Hosted on **docker-sandbox-platform** (or local `workshop-app/` with `.env.local`):
 
 - Server Actions: `docker-sandbox-platform/src/lib/actions/workshop.ts`
 - Migrations: `docker-sandbox-platform/supabase/migrations/`
-- Env: `NEXT_PUBLIC_PLATFORM_URL` in `workshop-app/.env.local` when running the sbx workspace locally
+- Env: `workshop-app/.env.local` when running labs locally
 
 ## Agent workflow for live demo (last 15 min)
 
 1. Open `workshop-app/` in Cursor
-2. Run `npm run dev` on host OR `sbx run cursor workshop-app/ --name workshop-ui`
+2. Run `npm run dev` on host OR `cd workshop-app && sbx run cursor . --kit ../customize/kit/workshop-app-nextjs --name workshop-ui`
 3. Use Chrome DevTools MCP to verify the running app
-4. Prefer clone mode: `sbx run --clone cursor workshop-app/ --name feature/demo`
+4. Prefer clone mode from repo root: `sbx run --clone cursor . --name feature/demo`
 
 ## Security rules for agents
 
 - Never write API keys into repo files, Dockerfiles, or `.env` committed to git
-- Use `sbx secret set -g anthropic` on the host for credentials
+- Use `sbx secret set -g cursor` on the host before `sbx run cursor` (Lab 1). Lab 3 uses `sbx secret set -g github` for the credential-proxy demo.
 - Do not disable network policy in lab examples
 - Lab attack simulations use fake hosts (`api.example.com`, `evil.example.com`)
 
 ## sbx quick reference
 
 ```bash
-sbx run claude .                         # YOLO agent in microVM
-sbx run cursor workshop-app/             # Cursor agent on demo app
+sbx run cursor .                         # YOLO agent in microVM (from project dir)
+cd workshop-app && sbx run cursor . \
+  --kit ../customize/kit/workshop-app-nextjs   # Lab 5 kit pattern
 sbx ls                                   # list sandboxes (status, ports, workspace)
 sbx policy deny network "host"           # block outbound
-sbx secret set -g anthropic              # host keychain
-sbx run --clone claude . --name feat-x   # isolated Git clone
+sbx secret set -g cursor      # Cursor API key (Lab 1+)
+sbx run --clone cursor . --name feat-x   # isolated Git clone
 sbx rm NAME                              # full teardown
 ```
 
@@ -64,7 +61,7 @@ Validate commands against [Docker Sandboxes docs](https://docs.docker.com/ai/san
 
 ## workshop-app
 
-Next.js 16 demo for sbx labs. **Agent rules:** [workshop-app/AGENTS.md](./workshop-app/AGENTS.md)
+Next.js 16 **playground** for sbx labs. Labs, auth, and progress redirect to the [hosted platform](https://nextjs-26f1-3000.prg1.zerops.app). **Agent rules:** [workshop-app/AGENTS.md](./workshop-app/AGENTS.md)
 
 ## docker-sandbox-platform
 

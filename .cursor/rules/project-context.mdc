@@ -1,0 +1,35 @@
+---
+description: Workshop app purpose, routes, and data sources
+alwaysApply: true
+---
+
+# Project context
+
+**workshop-app** — Next.js 16 App Router demo for the Docker Sandboxes workshop.
+
+## Routes (this app)
+
+| Path | Purpose |
+|------|---------|
+| `/` | Home |
+| `/labs` | Redirects to platform |
+| `/about` | About the workshop |
+
+Register, login, profile, questions, and admin → **platform** via `NEXT_PUBLIC_PLATFORM_URL` (see `src/lib/platform.ts`).
+
+## Key files
+
+- `src/lib/workshop-data.ts` — lab metadata, copy, links
+- `src/lib/site-config.ts` — `platformUrl()`, nav items
+- `src/components/layout/` — header, footer, page shell
+- `src/components/ui/` — shadcn/ui + Apple design tokens
+
+## Dev
+
+```bash
+npm run dev    # predev runs sync-dev-env demo script
+npm run build
+npm run lint
+```
+
+Default: http://localhost:3000. Platform: https://nextjs-26f1-3000.prg1.zerops.app

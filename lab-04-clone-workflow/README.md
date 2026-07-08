@@ -1,9 +1,10 @@
 # Lab 4 — Direct & Clone Mode
 
 **Time:** ~25 min  
-**Workspace:** [`workshop-app/`](../workshop-app/) in [docker-sandbox-workshop](https://github.com/kristiyan-velkov/docker-sandbox-workshop)
+**Repo:** [docker-sandbox-workshop](https://github.com/kristiyan-velkov/docker-sandbox-workshop)  
+**Workspace:** `workshop-app/`
 
-**Goal:** Clone the workshop repo, validate `workshop-app` locally, then compare **direct mode** and **clone mode** in sbx.
+**Goal:** Compare **direct mode** (host edits immediately) vs **clone mode** (isolated Git in the VM), then bring agent work back to your repo on `main`.
 
 → **[GUIDE.md](./GUIDE.md)** — step-by-step commands
 
@@ -13,9 +14,9 @@
 
 In Lab 1 you used **direct mode** — the sandbox mounts your host folder; agent edits appear immediately. That is fine for exploration, but risky for Git: the agent can commit, stash, or dirty your main checkout.
 
-**Clone mode** gives the sandbox a **private Git clone**. The agent branches and commits inside the VM. When done, you `git fetch sandbox-<name>` on the host and review before merging. Your local `main` stays clean.
+**Clone mode** gives the sandbox a **private Git clone**. The agent branches and commits inside the VM. When done, you `git fetch sandbox-<name>` on the host, review, push, and merge. Your local `main` stays clean during agent work.
 
-This lab uses **`workshop-app/`** from the workshop monorepo — no kit, no Supabase setup.
+No kit or Supabase setup for this lab.
 
 ---
 
@@ -23,43 +24,48 @@ This lab uses **`workshop-app/`** from the workshop monorepo — no kit, no Supa
 
 | | Direct mode (default) | Clone mode (`--clone`) |
 |---|----------------------|------------------------|
-| Workspace | Host folder mounted read-write | Private in-VM Git clone |
+| Workspace | `workshop-app/` (read-write mount) | `.` at repo root (private in-VM clone) |
 | Host changes | Immediate | Only after `git fetch sandbox-<name>` |
-| Host working tree | Can be modified | Stays clean |
-| Set at | Any run | **Create time only** — cannot add later |
+| Host `main` | Can be modified | Stays clean |
+| Set at | Any run | **Create time only** |
+
+All `sbx` commands run from the **monorepo root** after setup. `--clone` requires the Git repo root (`.`) — not `workshop-app/`.
 
 ---
 
 ## Prerequisites
 
 - Labs 1–3 complete
-- Node.js on the host (for `npm install` / `npm run dev`)
+- Node.js on the host
 - `sbx secret set -g cursor` from Lab 1
 
 ---
 
 ## What you'll do
 
-**Setup**
+**Setup (host)**
 
-1. `git clone https://github.com/kristiyan-velkov/docker-sandbox-workshop`
-2. `cd workshop-app` → `npm install` → `npm run dev` → confirm http://localhost:3000
+```bash
+git clone https://github.com/kristiyan-velkov/docker-sandbox-workshop.git
+cd docker-sandbox-workshop/workshop-app && npm install && npm run dev
+# confirm http://localhost:3000, Ctrl+C, cd ..
+```
 
 **Part A — Direct mode**
 
-1. `sbx run cursor workshop-app/ --name lab4-direct` from monorepo root
-2. Ask the agent to update the hero tagline in `src/components/home-hero.tsx`
-3. Confirm the edit is already on the host
-4. `sbx rm lab4-direct`
+1. `sbx run cursor workshop-app/ --name lab4-direct`
+2. Agent updates hero tagline in `src/components/home-hero.tsx` — edit appears on host immediately
+3. `sbx rm lab4-direct --force`
 
 **Part B — Clone mode**
 
-1. `sbx run --clone cursor workshop-app/ --name lab4-clone`
-2. Ask the agent to create `feat/lab4-test` and commit a small docs change
-3. On the host: `git fetch sandbox-lab4-clone`, review diff — `git status` still clean
-4. Remove sandbox and remote
+1. `sbx run --clone cursor . --name lab4-clone`
+2. Agent creates `feat/lab4-test`, commits in `workshop-app/src/lib/workshop-data.ts`
+3. `git fetch sandbox-lab4-clone`, review — `git status` on `main` stays clean
+4. Push branch, merge into `main` (PR or local merge)
+5. Remove sandbox and remote
 
-**Success looks like:** App runs locally on the host; direct-mode edits appear immediately; clone-mode commits show up only after `git fetch sandbox-lab4-clone`.
+**Done when:** Direct hero edit visible without fetch; host `main` never dirty during clone mode; agent commit on `origin/feat/lab4-test`, reviewed, merged into `main`.
 
 ---
 
@@ -76,9 +82,8 @@ This lab uses **`workshop-app/`** from the workshop monorepo — no kit, no Supa
 | Resource | Purpose |
 |----------|---------|
 | [Lab 5](../lab-05-workshop-app/) | Run workshop-app with a kit mixin |
-| [Lab 7](../lab-07-build-component/) | Clone mode for UI work |
-| [Lab 10](../lab-10-capstone/) | Clone + PR with `gh` |
+| [Lab 6](../lab-06-customize-stack/) | Create your custom kit — final lab |
 
 ## Takeaway
 
-Validate on the **host** first, then use **direct mode** for immediate edits or **clone mode** to isolate agent Git work — fetch `sandbox-<name>` when done, review, then merge or discard.
+Validate on the **host** first. Use **direct mode** on `workshop-app/` for immediate edits, or **clone mode** on `.` to isolate agent Git work — fetch `sandbox-<name>`, review, push, and merge when done.

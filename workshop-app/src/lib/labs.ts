@@ -5,10 +5,6 @@ export const WORKSHOP_LAB_IDS = [
   "lab-04",
   "lab-05",
   "lab-06",
-  "lab-07",
-  "lab-08",
-  "lab-09",
-  "lab-10",
 ] as const;
 
 export type WorkshopLabId = (typeof WORKSHOP_LAB_IDS)[number];

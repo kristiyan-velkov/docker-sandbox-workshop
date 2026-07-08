@@ -8,9 +8,9 @@ alwaysApply: false
 
 - Each lab has **README.md** (overview) and **GUIDE.md** (step-by-step commands)
 - Labs 1–3 include **workspace/** — the folder mounted into the sandbox
-- Labs 4–10 use **workshop-app/** from repo root as the workspace
+- Labs 4–6 use **workshop-app/** (Lab 5/6: `cd workshop-app` then `sbx run cursor .`) or **repo root** for clone mode (Lab 4)
 - Never commit real secrets (`.env.local`, API keys, tokens)
-- Sandbox names: `my-sandbox`, `lab2`, `lab3`, `workshop-ui`, `workshop-clone`
+- Sandbox names: `my-sandbox`, `lab2`, `lab3`, `lab4-direct`, `lab4-clone`, `lab5-kit`, `lab6-my-kit`
 - Use `sbx version` (not `sbx --version`), `sbx ls` (not `sbx status`)
 - Network policy init: `sbx policy init balanced` (first time only)
 - Templates: `docker build` → `docker image save` → `sbx template load`

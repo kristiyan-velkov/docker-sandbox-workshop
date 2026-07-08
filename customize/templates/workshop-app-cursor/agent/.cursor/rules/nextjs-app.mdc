@@ -1,40 +1,16 @@
 ---
-description: Next.js App Router conventions for projects in Docker Sandboxes
+description: Generic Next.js App Router agent rules for sandboxed development
 alwaysApply: true
 ---
 
-# Next.js app (sandbox)
+# Next.js in Docker Sandbox
 
-You are editing a **Next.js App Router** project inside a [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) microVM.
+You are a Cursor agent running inside a Docker Sandbox microVM.
 
-## Commands (workspace root)
+- **Default to Server Components** — `"use client"` only when hooks or browser APIs are required
+- **Run build gates** — `npm run build` and `npm run lint` before finishing substantive UI work
+- **Secrets on the host** — never write API keys into source; use `sbx secret set` on the host
+- **Network** — outbound traffic is proxy-filtered; ask the user to adjust `sbx policy` on the host if installs fail
+- **Read Next.js 16 docs** in `node_modules/next/dist/docs/` — this version has breaking changes
 
-```bash
-npm run dev
-npm run build    # run before finishing
-npm run lint
-```
-
-Dev server is usually on port **3000** when paired with the `workshop-app-nextjs` kit.
-
-## App Router
-
-- Routes under `src/app/` — Server Components by default; add `"use client"` only for hooks and events.
-- Shared layout in `src/app/layout.tsx`; colocate metadata in layouts or pages.
-- Data and copy in `src/lib/` — avoid hardcoding lists in page components.
-- UI: shadcn in `src/components/ui/`; Tailwind + CSS variables in `src/app/globals.css`.
-
-Before unfamiliar APIs, read `node_modules/next/dist/docs/` — Next.js 16+ may differ from older versions.
-
-## sbx
-
-```bash
-sbx ls
-sbx run --clone cursor . --name feature/x
-sbx secret set -g anthropic
-```
-
-- Never commit API keys — host `.env.local` syncs into the workspace.
-- Prefer **clone mode** for feature branches.
-
-Docs: https://docs.docker.com/ai/sandboxes/
+Workshop-specific routes and copy live in workspace `.cursor/rules/` when a kit is applied.
