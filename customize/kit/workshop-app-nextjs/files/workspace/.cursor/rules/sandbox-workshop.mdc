@@ -1,0 +1,35 @@
+---
+description: Docker Sandboxes workshop context for workshop-app in sbx
+alwaysApply: true
+---
+
+# Docker Sandbox — workshop-app
+
+This workspace is the **Next.js lab demo** synced into a [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) microVM.
+
+## Split with platform
+
+| App | Role |
+|-----|------|
+| **workshop-app** (this repo) | Labs, learn, about, local UI — runs in sbx |
+| **docker-sandbox-platform** | Register, login, profile, progress, admin, Q&A — [hosted on Zerops](https://nextjs-26f1-3000.prg1.zerops.app/) |
+
+Auth and Supabase live on the **platform**, not here. Use `redirectToPlatform()` / `platformUrl()` from `src/lib/platform.ts` for account flows.
+
+## sbx quick reference
+
+```bash
+sbx ls
+sbx run --clone cursor . --name feature/demo
+sbx policy deny network "host"
+sbx secret set -g anthropic
+sbx rm NAME
+```
+
+## Security
+
+- Never commit API keys or `.env.local`
+- Use `sbx secret set -g anthropic` on the host
+- Do not disable network deny rules in lab examples
+
+Docs: https://docs.docker.com/ai/sandboxes/

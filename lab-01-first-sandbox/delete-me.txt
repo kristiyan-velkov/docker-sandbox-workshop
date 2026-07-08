@@ -1,0 +1,1 @@
+Try to delete this file from inside the sandbox workspace — it lives outside the synced workspace/ mount, so the agent cannot remove it from the host.

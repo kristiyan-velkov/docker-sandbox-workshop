@@ -1,0 +1,14 @@
+---
+description: Next.js and shadcn/ui conventions for workshop-app
+globs: workshop-app/**/*
+alwaysApply: false
+---
+
+# workshop-app conventions
+
+- App Router under `workshop-app/src/app/`
+- **Design system:** Apple — tokens in `globals.css`, components in `src/components/ui/`
+- shadcn/ui components in `workshop-app/src/components/ui/`
+- Workshop content in `workshop-app/src/lib/workshop-data.ts`
+- Layout helpers: `PageShell`, `PageHero`, `SectionTitle` in `page-shell.tsx`
+- Run from `workshop-app/`: `npm run dev`, `npm run build`, `npm run lint`

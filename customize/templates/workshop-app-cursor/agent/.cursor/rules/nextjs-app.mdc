@@ -1,0 +1,40 @@
+---
+description: Next.js App Router conventions for projects in Docker Sandboxes
+alwaysApply: true
+---
+
+# Next.js app (sandbox)
+
+You are editing a **Next.js App Router** project inside a [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) microVM.
+
+## Commands (workspace root)
+
+```bash
+npm run dev
+npm run build    # run before finishing
+npm run lint
+```
+
+Dev server is usually on port **3000** when paired with the `workshop-app-nextjs` kit.
+
+## App Router
+
+- Routes under `src/app/` — Server Components by default; add `"use client"` only for hooks and events.
+- Shared layout in `src/app/layout.tsx`; colocate metadata in layouts or pages.
+- Data and copy in `src/lib/` — avoid hardcoding lists in page components.
+- UI: shadcn in `src/components/ui/`; Tailwind + CSS variables in `src/app/globals.css`.
+
+Before unfamiliar APIs, read `node_modules/next/dist/docs/` — Next.js 16+ may differ from older versions.
+
+## sbx
+
+```bash
+sbx ls
+sbx run --clone cursor . --name feature/x
+sbx secret set -g anthropic
+```
+
+- Never commit API keys — host `.env.local` syncs into the workspace.
+- Prefer **clone mode** for feature branches.
+
+Docs: https://docs.docker.com/ai/sandboxes/

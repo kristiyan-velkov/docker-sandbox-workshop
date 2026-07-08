@@ -1,0 +1,18 @@
+---
+description: Agent behavior when running sbx or editing lab content
+globs: lab-*/**/*
+alwaysApply: false
+---
+
+# Lab content & sbx commands
+
+- Each lab has **README.md** (overview) and **GUIDE.md** (step-by-step commands)
+- Labs 1–3 include **workspace/** — the folder mounted into the sandbox
+- Labs 4–10 use **workshop-app/** from repo root as the workspace
+- Never commit real secrets (`.env.local`, API keys, tokens)
+- Sandbox names: `my-sandbox`, `lab2`, `lab3`, `workshop-ui`, `workshop-clone`
+- Use `sbx version` (not `sbx --version`), `sbx ls` (not `sbx status`)
+- Network policy init: `sbx policy init balanced` (first time only)
+- Templates: `docker build` → `docker image save` → `sbx template load`
+- Kits: `--kit ./path` at create; `sbx kit validate` / `sbx kit add`
+- Verify against https://docs.docker.com/ai/sandboxes/ and `sbx --help`

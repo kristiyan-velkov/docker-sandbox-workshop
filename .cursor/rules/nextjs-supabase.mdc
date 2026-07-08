@@ -1,0 +1,37 @@
+---
+description: Next.js App Router patterns — Server Components, Server Actions, Supabase
+globs: workshop-app/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Next.js + Supabase conventions
+
+## Architecture
+
+- **Server Components** fetch data (`getWorkshopSignups` in page, wrapped in Suspense)
+- **Client Components** only for interactivity (`RegisterForm` with `useActionState`)
+- **Server Actions** in `src/lib/actions/` with `"use server"` — validate with Zod, call `revalidatePath`
+- **Supabase server client** via `@supabase/ssr` in `src/lib/supabase/server.ts` — never import in Client Components
+
+## Do
+
+- Colocate action types with actions (`RegisterState`)
+- Use `NEXT_PUBLIC_*` for URL/anon key; never expose service role key
+- Handle missing env gracefully (`isSupabaseConfigured()`)
+- Wrap async server UI in `<Suspense>` with a skeleton fallback
+
+## Don't
+
+- Fetch Supabase in Client Components for initial data
+- Put secrets in `NEXT_PUBLIC_*` vars
+- Skip validation in Server Actions — always validate `FormData` server-side
+
+## Files
+
+| Path | Role |
+|------|------|
+| `src/lib/supabase/server.ts` | Server-only Supabase client |
+| `src/lib/actions/workshop-signups.ts` | Server Actions |
+| `src/app/register/page.tsx` | Server page + Suspense |
+| `src/components/register-form.tsx` | Client form |
+| `supabase/migrations/` | SQL schema |

@@ -1,0 +1,55 @@
+# Kit mixin for workshop-app — see SPEC-REFERENCE.md and README.md in this folder.
+# Docs: https://docs.docker.com/ai/sandboxes/customize/kits/
+
+# schemaVersion: kit spec v2 (caps.network + top-level publishedPorts)
+schemaVersion: "2"
+
+# kind: mixin extends an existing agent; sandbox would define a full agent from scratch
+kind: mixin
+
+# name: stable CLI identifier (sbx kit inspect, pack, push)
+name: workshop-app-nextjs
+
+# displayName / description: human-readable metadata for inspect and docs
+displayName: Next.js workshop-app
+description: >-
+  Prepares the WeAreDevelopers workshop-app for agent development — npm ci,
+  Next.js dev server on port 3000, network allow-list, Claude skill, and
+  Cursor rules (.cursor/rules/) with project conventions.
+
+# publishedPorts: inbound ports exposed from the VM (v2 top-level field)
+publishedPorts:
+  - container: 3000 # Next.js dev server listens here
+    protocol: tcp
+    name: next-dev # label in sbx ls / port forwarding
+
+# caps.network.allow: outbound domains permitted by the sandbox forward proxy
+caps:
+  network:
+    allow:
+      - dockerfrontend.com
+      - docs.docker.com
+      - google.com
+
+# environment.variables: non-secret env inside the VM (never API keys; no HTTP_PROXY)
+environment:
+  variables:
+    NEXT_TELEMETRY_DISABLED: "1"
+
+commands:
+  install:
+    - command: "npm ci --no-audit --no-fund"
+      user: "1000"
+
+  startup:
+    - command:
+        - npm
+        - run
+        - dev
+        - --
+        - --hostname
+        - 0.0.0.0
+        - --port
+        - "3000"
+      user: "1000"
+      background: true
