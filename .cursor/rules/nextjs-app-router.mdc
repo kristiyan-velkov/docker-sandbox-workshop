@@ -1,0 +1,16 @@
+---
+description: Next.js App Router conventions for workshop-app
+globs: src/**/*
+alwaysApply: false
+---
+
+# Next.js App Router
+
+- Routes under `src/app/` — use Server Components by default; `"use client"` only when needed.
+- Shared layout: `src/app/layout.tsx`, metadata in page files or `layout.tsx`.
+- Workshop content from `src/lib/workshop-data.ts` — avoid hardcoding lab lists in pages.
+- External platform links: `platformUrl("/login")` from `src/lib/site-config.ts`.
+- UI: shadcn in `src/components/ui/`; page chrome via `PageShell`, `PageHero`, `SectionTitle`.
+- Styling: Tailwind + CSS variables in `src/app/globals.css` (Apple design tokens).
+
+Before using newer Next APIs, check `node_modules/next/dist/docs/` — this project may use conventions that differ from older Next versions.

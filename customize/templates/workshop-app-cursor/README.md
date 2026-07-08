@@ -23,7 +23,7 @@ sbx run --template workshop-app-cursor:v1 cursor workshop-app/ \
 
 | File | Role |
 |------|------|
-| `Dockerfile` | Extends `cursor-agent-docker`; copies Next.js rule into agent home |
-| `agent/.cursor/rules/nextjs-app.mdc` | Always-on Next.js App Router + sbx conventions |
+| `Dockerfile` | Extends `cursor-agent-docker`; copies rule into agent home |
+| `agent/.cursor/rules/sandbox-workshop.mdc` | Always-on Cursor rule |
 
 See [SPEC-REFERENCE.md](../SPEC-REFERENCE.md).

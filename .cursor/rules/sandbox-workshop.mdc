@@ -1,0 +1,36 @@
+---
+description: Docker Sandboxes workshop context for workshop-app in sbx
+alwaysApply: true
+---
+
+# Docker Sandbox — workshop-app
+
+This workspace is the **Next.js playground** synced into a [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) microVM.
+
+## Split with platform
+
+| App | Role |
+|-----|------|
+| **workshop-app** (this repo) | Playground UI — home, about, quick start — runs in sbx |
+| **Hosted platform** | Register, login, labs, progress, Q&A — https://nextjs-26f1-3000.prg1.zerops.app |
+
+Auth and Supabase live on the **platform**, not here. Use `redirectToPlatform()` / `platformUrl()` from `src/lib/platform.ts`.
+
+## sbx quick reference
+
+```bash
+sbx ls
+cd workshop-app && sbx run cursor . --kit ../customize/kit/workshop-app-nextjs --name lab5-kit
+sbx run --clone cursor . --name lab4-clone    # from monorepo root
+sbx policy deny network "host"
+sbx secret set -g cursor
+sbx rm NAME
+```
+
+## Security
+
+- Never commit API keys or `.env.local`
+- Use `sbx secret set -g cursor` on the host (Lab 1); `sbx secret set -g github` (Lab 3)
+- Do not disable network deny rules in lab examples
+
+Docs: https://docs.docker.com/ai/sandboxes/

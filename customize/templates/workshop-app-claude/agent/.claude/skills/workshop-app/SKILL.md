@@ -1,7 +1,7 @@
 ---
 name: workshop-app
 description: >-
-  Build and maintain the WeAreDevelopers Berlin Docker Sandboxes workshop-app
+  Build and maintain the Docker Sandboxes workshop-app
   (Next.js 16). Use when editing UI, Server Actions, Supabase, or workshop copy.
 ---
 

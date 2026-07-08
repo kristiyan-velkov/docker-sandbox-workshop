@@ -1,49 +1,40 @@
 # Lab 4 — Step-by-step
 
-## 0. Clone the workshop repo
+## Setup (host)
 
 ```bash
 git clone https://github.com/kristiyan-velkov/docker-sandbox-workshop.git
-cd docker-sandbox-workshop
+cd docker-sandbox-workshop/workshop-app
+npm install && npm run dev
 ```
 
-## 1. Validate workshop-app on the host
+Open **http://localhost:3000** — confirm the site loads. Stop with **Ctrl+C**, then return to the repo root:
 
 ```bash
-cd workshop-app
-npm install
-npm run dev
+cd ..
 ```
 
-Open **http://localhost:3000** in your browser — confirm the site loads.
-
-Stop the dev server with **Ctrl+C** before starting sandboxes.
-
-```bash
-cd ..   # back to docker-sandbox-workshop root
-```
+All `sbx` commands below run from `docker-sandbox-workshop/` (monorepo root).
 
 ---
 
 ## Part A — Direct mode
 
-### 2. Start sandbox (default)
-
-From the **monorepo root** (`docker-sandbox-workshop/`):
+### 1. Start sandbox
 
 ```bash
 sbx run cursor workshop-app/ --name lab4-direct
 ```
 
-Direct mode mounts your working tree **read-write**. Changes the agent makes appear on the host immediately.
+Direct mode mounts `workshop-app/` **read-write**. Agent edits appear on the host immediately.
 
-### 3. Agent task
+### 2. Agent task
 
 > Update the hero tagline in `src/components/home-hero.tsx` to mention Docker Sandboxes. Show me the new line.
 
-On the host, open `workshop-app/src/components/home-hero.tsx` — the edit should already be there.
+On the host, open `workshop-app/src/components/home-hero.tsx` — the edit should already be there (no fetch needed).
 
-### 4. Clean up direct mode
+### 3. Clean up
 
 ```bash
 sbx rm lab4-direct --force
@@ -53,47 +44,57 @@ sbx rm lab4-direct --force
 
 ## Part B — Clone mode
 
-### 5. Start sandbox with `--clone`
+`--clone` requires the **Git repository root**. Use `.` from the monorepo root — not `workshop-app/` (that subfolder has no `.git`).
 
-From the monorepo root:
+### 4. Start sandbox with `--clone`
 
 ```bash
-sbx run --clone cursor workshop-app/ --name lab4-clone
+sbx run --clone cursor . --name lab4-clone
 ```
 
-Clone mode gives the agent a **private Git clone** inside the VM. Your host repo is mounted **read-only** — the host gains remote `sandbox-lab4-clone`.
+Clone mode gives the agent a **private Git clone** of the whole monorepo inside the VM. Your host `main` stays read-only — remote `sandbox-lab4-clone` is added on the host.
 
-### 6. Agent task
+### 5. Agent task
 
-> Create branch `feat/lab4-test`. Add a one-line comment at the top of `src/lib/workshop-data.ts` noting this was edited in clone mode. Commit with message `docs: clone mode test`.
+> Create branch `feat/lab4-test`. Add a one-line comment at the top of `workshop-app/src/lib/workshop-data.ts` noting this was edited in clone mode. Commit with message `docs: clone mode test`.
 
-While the agent works, `git status` on the host should stay clean.
+While the agent works, `git status` on host `main` should stay clean.
 
-### 7. Fetch and review on the host
-
-From the monorepo root:
+### 6. Fetch and review on the host
 
 ```bash
 git fetch sandbox-lab4-clone
 git log sandbox-lab4-clone/feat/lab4-test --oneline -3
 git diff main..sandbox-lab4-clone/feat/lab4-test
-git status   # host tree still clean
+git status   # main still clean
 ```
 
-### 8. Optional — check out the branch
+### 7. Push and merge into main
 
 ```bash
 git checkout -b feat/lab4-test sandbox-lab4-clone/feat/lab4-test
-git checkout main
-git branch -D feat/lab4-test
+git push -u origin feat/lab4-test
 ```
 
-### 9. Clean up clone mode
+Merge (pick one):
+
+- **PR:** GitHub → merge PR → `git checkout main && git pull origin main`
+- **Local:** `git checkout main && git merge feat/lab4-test && git push origin main`
+
+### 8. Clean up
 
 ```bash
 sbx rm lab4-clone --force
 git remote remove sandbox-lab4-clone 2>/dev/null || true
 ```
+
+---
+
+## Done when
+
+- Direct mode: hero edit visible on host without fetch
+- Clone mode: host `main` never dirty during agent work
+- Agent commit on `origin/feat/lab4-test`, reviewed, merged into `main`
 
 ---
 

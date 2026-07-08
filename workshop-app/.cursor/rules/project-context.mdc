@@ -1,35 +1,31 @@
 ---
-description: Workshop app purpose, routes, and data sources
+description: workshop-app routes, key files, and dev commands
 alwaysApply: true
 ---
 
-# Project context
+# workshop-app project context
 
-**workshop-app** — Next.js 16 App Router demo for the Docker Sandboxes workshop (WeAreDevelopers Berlin).
-
-## Routes (this app)
-
-| Path | Purpose |
-|------|---------|
-| `/` | Home |
-| `/labs` | Redirects to platform |
-| `/about` | About the workshop |
-
-Register, login, profile, questions, and admin → **platform** via `NEXT_PUBLIC_PLATFORM_URL` (see `src/lib/platform.ts`).
+**CWD:** workspace root (`workshop-app/`)
 
 ## Key files
 
-- `src/lib/workshop-data.ts` — lab metadata, copy, links
-- `src/lib/site-config.ts` — `platformUrl()`, nav items
-- `src/components/layout/` — header, footer, page shell
-- `src/components/ui/` — shadcn/ui + Apple design tokens
+| Path | Purpose |
+|------|---------|
+| `src/lib/workshop-data.ts` | Lab steps, agenda, hints — edit workshop copy here |
+| `src/app/page.tsx` | Landing page |
+| `src/app/learn/` | YOLO, security, commands |
+| `src/components/home-hero.tsx` | Hero section |
+| `src/components/lab-card.tsx` | Lab cards |
+| `src/app/globals.css` | Apple design tokens |
 
-## Dev
+## Dev commands
 
 ```bash
-npm run dev    # predev runs sync-dev-env demo script
-npm run build
+npm run dev      # :3000 — kit starts this in background when using --kit
+npm run build    # required gate before finishing
 npm run lint
 ```
 
-Default: http://localhost:3000. Platform: https://nextjs-26f1-3000.prg1.zerops.app
+## Env
+
+Copy `.env.sandbox.example` → `.env.local` on the **host** before `sbx run`. Only `NEXT_PUBLIC_PLATFORM_URL` is needed for sandbox demos.

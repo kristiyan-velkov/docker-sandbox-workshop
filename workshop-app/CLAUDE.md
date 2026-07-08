@@ -2,7 +2,7 @@
 
 # Claude Code — workshop-app
 
-Read `AGENTS.md` first. This file adds Claude Code–specific workflow for the WeAreDevelopers Berlin workshop.
+Read `AGENTS.md` first. This file adds Claude Code–specific workflow for the Docker Sandboxes workshop.
 
 ## Working directory
 

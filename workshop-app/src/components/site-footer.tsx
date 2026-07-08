@@ -20,14 +20,13 @@ export function SiteFooter() {
                   Docker Sandbox Workshop
                 </p>
                 <p className="text-sm text-slate-400">
-                  {workshop.event} · {workshop.location}
+                  Hands-on Docker Sandboxes workshop
                 </p>
               </div>
             </div>
             <p className="mb-6 max-w-md text-sm leading-relaxed text-slate-500">
-              Hands-on WeAreDevelopers Berlin workshop — run AI coding agents safely in isolated
-              microVMs with the sbx CLI. Labs, registration, and progress live on the hosted
-              platform.
+              Run AI coding agents safely in isolated microVMs with the sbx CLI.
+              Labs, registration, and progress live on the hosted platform.
             </p>
             <div className="flex flex-wrap gap-2">
               <FooterLink href={platformUrl("/labs")} external>

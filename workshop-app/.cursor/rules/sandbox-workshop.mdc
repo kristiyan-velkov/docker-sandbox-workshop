@@ -1,35 +1,24 @@
 ---
-description: Docker Sandboxes workshop context for workshop-app in sbx
+description: Docker Sandbox context and workshop platform split
 alwaysApply: true
 ---
 
-# Docker Sandbox — workshop-app
+# Sandbox workshop context
 
-This workspace is the **Next.js lab demo** synced into a [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) microVM.
+You are editing **workshop-app** inside a Docker Sandbox (`sbx`).
 
-## Split with platform
+## Platform split
 
-| App | Role |
-|-----|------|
-| **workshop-app** (this repo) | Labs, learn, about, local UI — runs in sbx |
-| **docker-sandbox-platform** | Register, login, profile, progress, admin, Q&A — [hosted on Zerops](https://nextjs-26f1-3000.prg1.zerops.app/) |
+| Repo | Role |
+|------|------|
+| **workshop-app** (this workspace) | Next.js playground — links to hosted platform |
+| **Hosted platform** | Register, login, lab progress — https://nextjs-26f1-3000.prg1.zerops.app |
 
-Auth and Supabase live on the **platform**, not here. Use `redirectToPlatform()` / `platformUrl()` from `src/lib/platform.ts` for account flows.
+Do not add Supabase or auth to workshop-app. Link outward via `NEXT_PUBLIC_PLATFORM_URL`.
 
-## sbx quick reference
+## sbx basics
 
-```bash
-sbx ls
-sbx run --clone cursor . --name feature/demo
-sbx policy deny network "host"
-sbx secret set -g anthropic
-sbx rm NAME
-```
-
-## Security
-
-- Never commit API keys or `.env.local`
-- Use `sbx secret set -g anthropic` on the host
-- Do not disable network deny rules in lab examples
-
-Docs: https://docs.docker.com/ai/sandboxes/
+- Workspace syncs from the host — direct mode edits appear on the host immediately
+- Clone mode (`--clone`) — agent commits in a private clone; host fetches `sandbox-<name>`
+- Secrets stay on the host — VM sees sentinels; proxy injects real credentials
+- Network is deny-by-default — kit allow-list permits npm, GitHub, etc.

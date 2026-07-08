@@ -1,28 +1,24 @@
 ---
-description: Cursor agent workflow in Docker Sandbox for workshop-app
+description: Cursor agent workflow inside sbx sandboxes
 alwaysApply: true
 ---
 
 # Cursor agent in sbx
 
-You are editing **workshop-app** inside a Docker Sandbox microVM.
-
 ## Workflow
 
-1. Read `src/lib/workshop-data.ts` before changing lab copy or routes.
-2. Prefer **clone mode** for feature work: `sbx run --clone cursor . --name feature/x`
-3. Run `npm run dev` in the sandbox; preview on published port `:3000`.
-4. Account flows (register, login, profile) → platform URL — do not add Supabase to this app.
+1. Read `.cursor/rules/` and `.claude/skills/workshop-app/SKILL.md` before large edits
+2. Prefer existing components (`PageShell`, `LabCard`, `CommandBlock`) over new abstractions
+3. Run `npm run build` and `npm run lint` before declaring work done
+4. In clone mode, branch first — never commit directly to `main`
 
-## MCP (when configured on host)
+## Host vs VM
 
-| Server | Use |
-|--------|-----|
-| **figma** / **figma-desktop** | Design context for UI tasks |
-| **chrome-devtools** / **cursor-ide-browser** | Verify running app |
+- Policy and secrets: run `sbx policy` / `sbx secret` on the **host**
+- Verify dev server: `sbx exec <name> -- curl http://127.0.0.1:3000`
+- Audit network: `sbx policy log <name>`
 
-## Do not
+## MCP (when available)
 
-- Add `@supabase/*` or server actions for auth/DB here
-- Write secrets into repo files or Dockerfiles
-- Use fake `sbx status` — use `sbx ls`
+- Chrome DevTools MCP — verify pages in the forwarded browser URL from `sbx ls`
+- Use browser snapshot before claiming UI work is complete

@@ -1,38 +1,32 @@
 ---
-description: Docker Sandboxes (sbx) workshop context for WeAreDevelopers Berlin
+description: Docker Sandboxes (sbx) workshop context
 alwaysApply: true
 ---
 
 # Docker Sandbox Workshop
 
-2-hour core session + **10 self-paced labs** on [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/).
+2-hour core session + **6 self-paced labs** on [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/).
 
 ## Structure
 
 - `lab-01-first-sandbox/` — install, run, inspect, teardown
 - `lab-02-network-policy/` — network policy, custom template, clone preview
-- `lab-03-secrets/` — credential injection, sentinel values
-- `lab-04-clone-workflow/` — `--clone`, test branch, `git fetch sandbox-<name>`
-- `lab-05-workshop-app/` — template + kit for workshop-app
-- `lab-06-customize-stack/` — templates + kits + skills from `customize/`
-- `lab-07-build-component/` — agent adds UI component in clone mode
-- `lab-08-create-kit/` — build & validate custom kit (`starter-kit/`)
-- `lab-09-use-custom-kit/` — run with `./my-workshop-kit`
-- `lab-10-capstone/` — `gh` secret + clone + PR
-- `workshop-app/` — Next.js demo — sbx workspace for labs 4–10
+- `lab-03-secrets/` — GitHub credential injection, sentinel values
+- `lab-04-clone-workflow/` — direct & clone mode on workshop-app / monorepo
+- `lab-05-workshop-app/` — pre-built kit + network allow/deny demo
+- `lab-06-customize-stack/` — create your custom kit — **final lab**
+- `workshop-app/` — Next.js **playground** — sbx workspace for labs 4–6
 - `docker-sandbox-platform/` — hosted register / login / progress — https://nextjs-26f1-3000.prg1.zerops.app
 - `workshop-landing/` — Zerops conference site
-- `workshop-app/` — conference landing (Zerops)
 - `customize/` — templates (`templates/`) and kit mixin (`kit/`)
 
 ## Key concepts
 
-- **`sbx run claude .`** / **`sbx run cursor .`** — boot microVM, sync workspace, start agent
+- **`sbx run cursor .`** — boot microVM, sync workspace, start agent
 - **`sbx run --clone`** — private Git clone; fetch `sandbox-<name>` on host ([workflows](https://docs.docker.com/ai/sandboxes/workflows/))
 - **`sbx ls`** — list sandboxes — no `sbx status`
-- **Templates** — `docker build` → `docker image save` → `sbx template load` (no shell scripts)
-- **Kits** — `--kit ./path` at create; `sbx kit validate` / `sbx kit add`
-- **Secrets** — `sbx secret set -g anthropic`; VM sees `proxy-managed`
+- **Kits** — `--kit ./path` at create; bootstrap via `files/home/` + `commands.startup`; `sbx kit validate`
+- **Secrets** — `sbx secret set -g cursor` (Lab 1); `sbx secret set -g github` (Lab 3)
 
 ## When editing lab content
 

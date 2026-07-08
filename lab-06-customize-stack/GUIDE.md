@@ -1,46 +1,131 @@
 # Lab 6 — Step-by-step
 
-Run from **repository root**.
+From **docker-sandbox-workshop** monorepo root (Lab 4 clone). Final lab — create your custom kit.
 
-## 1. Inspect the workshop kit
+## 1. Copy the kit template
 
-```bash
-sbx kit validate ./customize/kit/workshop-app-nextjs
-sbx kit inspect ./customize/kit/workshop-app-nextjs
-```
-
-## 2. Build template + run full stack
+Never edit `lab-06-customize-stack/kit-template/` in place.
 
 ```bash
-cd customize/templates/workshop-app-cursor
-docker build -t workshop-app-cursor:v1 .
-docker image save workshop-app-cursor:v1 -o workshop-app-cursor.tar
-sbx template load workshop-app-cursor.tar
-cd ../../..
-
-sbx run --template workshop-app-cursor:v1 cursor workshop-app/ \
-  --kit ./customize/kit/workshop-app-nextjs \
-  --name customize-stack
+cp -r lab-06-customize-stack/kit-template ./my-workshop-kit
+ls my-workshop-kit/
 ```
 
-## 3. Verify each layer
+You should see `spec.yaml`, `README.md`, and `files/home/` + `files/workspace/`.
+
+## 2. Fill in spec.yaml
+
+Open `my-workshop-kit/spec.yaml`. Edit each block:
+
+| Block | What to set |
+|-------|-------------|
+| `name` / `displayName` | Your kit id — e.g. `acme-nextjs-kit` |
+| `description` | Short summary for `sbx kit inspect` |
+| `network.allowedDomains` | Domains your team needs (`registry.npmjs.org`, APIs, docs) |
+| `network.deniedDomains` | Domains to block (`google.com`, `linkedin.com`, …) |
+| `environment.variables` | Non-secret env in the VM |
+| `commands.startup` | Pre-wired to `workshop-bootstrap.sh` — tweak `description` if you like |
+
+Bootstrap script is already in `files/home/.local/bin/workshop-bootstrap.sh` — `cd ${WORKDIR}`, `npm ci`, `npm run dev :3000`.
+
+## 3. Customize the skill
+
+Edit `my-workshop-kit/files/workspace/.claude/skills/my-workshop-kit/SKILL.md` with your team rules. If you change `name` in `spec.yaml`, rename the skill folder to match.
+
+## 4. Validate
 
 ```bash
-sbx exec customize-stack -- test -d node_modules && echo "kit install OK"
-sbx exec customize-stack -- curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000
-sbx exec customize-stack -- test -f .claude/skills/workshop-app/SKILL.md && echo "workspace skill OK"
-sbx exec customize-stack -- test -f /home/agent/.cursor/rules/sandbox-workshop.mdc && echo "template rule OK"
+sbx kit validate ./my-workshop-kit
+sbx kit inspect ./my-workshop-kit
 ```
 
-Ask the agent:
+Fix every error before running.
 
-> Read `.claude/skills/workshop-app/SKILL.md` and summarize the build gate rules.
-
-## 4. kit add on existing sandbox
+## 5. Run your kit
 
 ```bash
-sbx create shell workshop-app/ --name kit-add-demo -q
-sbx kit add kit-add-demo ./customize/kit/workshop-app-nextjs
-sbx exec kit-add-demo -- test -d node_modules && echo "kit add OK"
-sbx rm kit-add-demo customize-stack --force
+cd workshop-app
+cp .env.sandbox.example .env.local
+
+sbx run cursor . \
+  --kit ../my-workshop-kit \
+  --name lab6-my-kit
 ```
+
+## 6. Verify
+
+```bash
+sbx ls
+sbx exec lab6-my-kit -- curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000
+sbx exec lab6-my-kit -- test -f .claude/skills/my-workshop-kit/SKILL.md && echo "skill OK"
+```
+
+Agent prompt:
+
+> Read `.claude/skills/my-workshop-kit/SKILL.md` and summarize my kit rules.
+
+## 7. Clean up
+
+```bash
+sbx rm lab6-my-kit --force
+```
+
+Keep `./my-workshop-kit/` — reuse it on any project with `--kit ../my-workshop-kit`.
+
+---
+
+## Blank template reference
+
+Starting point in `kit-template/spec.yaml`:
+
+```yaml
+schemaVersion: "1"
+kind: mixin
+name: my-workshop-kit
+displayName: My workshop kit
+description: >-
+  Custom kit template for Lab 6
+
+network:
+  allowedDomains:
+    - registry.npmjs.org
+  deniedDomains:
+    - google.com
+
+environment:
+  variables:
+    NEXT_TELEMETRY_DISABLED: "1"
+
+commands:
+  startup:
+    - command: [sh, /home/agent/.local/bin/workshop-bootstrap.sh]
+      user: "1000"
+      background: true
+      description: npm ci (if needed) and Next.js dev server on :3000
+```
+
+### Block-by-block
+
+| Block | What it does |
+|-------|----------------|
+| `schemaVersion: "1"` | Required. Official kit schema — [kit-reference](https://docs.docker.com/ai/sandboxes/customize/kit-reference/). |
+| `kind: mixin` | Extends an existing agent (`cursor`). Use `kind: sandbox` + `sandbox:` block for a full custom agent. |
+| `name` / `displayName` / `description` | Identity — `name` is the CLI identifier. |
+| `network.allowedDomains` | Domains the proxy permits. |
+| `network.deniedDomains` | Explicit blocks — deny wins over allow. |
+| `environment.variables` | Non-secret env in the VM. |
+| `files/home/` | Bootstrap script → `/home/agent/` — npm ci + dev server. |
+| `commands.startup` | Runs every start; `background: true` for dev server. |
+| `commands.install` | Agent/tool installs (`curl \| bash`) at create time — not `npm ci` in mounted workspaces. |
+| `files/workspace/` | Static files copied into workspace — rules, skills, `.env` examples. |
+
+Full field reference: [Kit spec reference](https://docs.docker.com/ai/sandboxes/customize/kit-reference/) · [SPEC-REFERENCE.md](../customize/SPEC-REFERENCE.md)
+
+---
+
+## Docker docs
+
+| Topic | Link |
+|-------|------|
+| Customize | [Templates, kits, and mixins](https://docs.docker.com/ai/sandboxes/customize/) |
+| Kit reference | [Kit spec reference](https://docs.docker.com/ai/sandboxes/customize/kit-reference/) |
