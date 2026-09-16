@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 export function HeroBackground() {
   return (
     <div className="pointer-events-none absolute inset-0">

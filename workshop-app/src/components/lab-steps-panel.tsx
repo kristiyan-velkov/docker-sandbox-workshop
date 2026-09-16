@@ -76,9 +76,9 @@ export function LabStepsPanel({
   const [openedAt, setOpenedAt] = useState<number | null>(null);
 
   useEffect(() => {
-    if (sectionOpen && openedAt === null) {
-      setOpenedAt(Date.now());
-    }
+    if (!sectionOpen || openedAt !== null) return;
+    const id = requestAnimationFrame(() => setOpenedAt(Date.now()));
+    return () => cancelAnimationFrame(id);
   }, [sectionOpen, openedAt]);
 
   const unlockAnchor = showTracker ? startedAt : openedAt ? new Date(openedAt).toISOString() : null;
